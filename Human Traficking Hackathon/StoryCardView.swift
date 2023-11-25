@@ -9,141 +9,193 @@ import SwiftUI
 
 struct StoryCardView: View {
     @Environment(\.presentationMode) var presentationMode
-    @State private var storyCards = StoryCardData.allCases
-    @State private var draggingState = CGSize.zero
+    @State private var storyCards: [Card]
+    @State private var currentCardIndex = 0
+    @State private var flipped = false
+    @State private var dragState = CGSize.zero
+    @State private var rightAnswerCount = 0
+    @State private var showEndCard = false
+
+    let storyTitle: String
+
+    init(storyTitle: String, storyCards: [Card]) {
+        self.storyTitle = storyTitle
+        self._storyCards = State(initialValue: storyCards)
+    }
 
     var body: some View {
-        VStack {
-            Button(action: {
-                    self.presentationMode.wrappedValue.dismiss()
-                }) {
+        ZStack {
+            VStack {
+                Text(storyTitle)
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.white)
+                    .padding(.top, 50)
+
+                Spacer()
+
+                if currentCardIndex < storyCards.count {
+                    let card = storyCards[currentCardIndex]
+                    let answers = [card.answer1, card.answer2].shuffled()
+
+                    CardView(card: card, flipped: $flipped)
+                        .padding()
+                        .offset(x: dragState.width)
+                        .gesture(
+                            DragGesture()
+                                .onChanged { gesture in
+                                    dragState = gesture.translation
+                                }
+                                .onEnded { _ in
+                                    if abs(dragState.width) > 100 {
+                                        answerChosen(answer: dragState.width > 0 ? answers[1] : answers[0])
+                                    }
+                                    dragState = .zero
+                                }
+                        )
+                        .animation(.interpolatingSpring(stiffness: 100, damping: 10), value: dragState)
+
                     HStack {
-                        Image(systemName: "arrow.left")
-                            .aspectRatio(contentMode: .fit)
-                            .foregroundColor(.white)
-                        Text("Back")
-                            .foregroundColor(.white)
+                        ForEach(answers, id: \.self) { answer in
+                            Button(answer) {
+                                answerChosen(answer: answer)
+                            }
+                            .buttonStyle(AnswerButtonStyle())
+                        }
                     }
+                    .padding([.leading, .bottom, .trailing], 20)
                 }
-                .padding()
-            Text("Your App Name") // Title of the app
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.white)
-                .padding(.top, 20)
 
-            ZStack {
-                ForEach(storyCards, id: \.self) { card in
-                    SwipeableCard(cardData: card, onSwipe: { direction in
-                        handleSwipe(card, direction: direction)
-                    })
-                    .offset(x: self.draggingState.width)
-                    .rotationEffect(.degrees(Double(self.draggingState.width / 20)), anchor: .bottom)
-                    .gesture(
-                        DragGesture()
-                            .onChanged { value in self.draggingState = value.translation }
-                            .onEnded { _ in self.draggingState = .zero }
-                    )
-                    .animation(.spring(), value: draggingState)
-                    .zIndex(self.isTopCard(card) ? 1 : 0)
-                    .padding(.horizontal, 20)
+                Spacer()
+            }
+            .blur(radius: showEndCard ? 20 : 0)
+
+            if showEndCard {
+                EndCardView(rightAnswerCount: rightAnswerCount, total: storyCards.count) {
+                    self.presentationMode.wrappedValue.dismiss()
                 }
             }
-
-            HStack {
-                Button("No") {
-                    // Action for No
-                }
-                .buttonStyle(MainMenuButtonStyle())
-
-                Button("Yes") {
-                    // Action for Yes
-                }
-                .buttonStyle(MainMenuButtonStyle())
-            }
-            .padding(.top, 10)
         }
         .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
-                .edgesIgnoringSafeArea(.all)    }
-
-
-    private func handleSwipe(_ card: StoryCardData, direction: SwipeDirection) {
-        storyCards.removeAll { $0 == card }
+        .edgesIgnoringSafeArea(.all)
     }
 
-    private func isTopCard(_ card: StoryCardData) -> Bool {
-        guard let topCard = storyCards.last else { return false }
-        return card == topCard
-    }
-}
+    private func answerChosen(answer: String) {
+        let correctAnswer = storyCards[currentCardIndex].answer1
+        if answer == correctAnswer {
+            rightAnswerCount += 1
+        }
 
-struct MainMenuButtonStyle: ButtonStyle {
-    func makeBody(configuration: Configuration) -> some View {
-        configuration.label
-            .font(.title)
-            .fontWeight(.semibold)
-            .foregroundColor(.white)
-            .padding()
-            .frame(maxWidth: .infinity)
-            .background(Color.white.opacity(0.2))
-            .cornerRadius(10)
-            .shadow(radius: 5)
-            .padding([.leading, .bottom, .trailing], 20) // Padding to match the card's horizontal padding
+        if currentCardIndex < storyCards.count - 1 {
+            currentCardIndex += 1
+            flipped = false
+        } else {
+            showEndCard = true
+        }
     }
 }
 
-
-
-struct SwipeableCard: View {
-    var cardData: StoryCardData
-    var onSwipe: (SwipeDirection) -> Void
+struct EndCardView: View {
+    var rightAnswerCount: Int
+    var total: Int
+    var onDismiss: () -> Void
 
     var body: some View {
         VStack {
-            Image(cardData.imageName)
-                .resizable()
-                .scaledToFit()
-
-            Text(cardData.question)
+            Text("Quiz Complete!")
+                .font(.largeTitle)
+                .fontWeight(.bold)
+            
+            Text("You got \(rightAnswerCount) out of \(total) right!")
                 .font(.headline)
+            
+            Button("Close") {
+                onDismiss()
+            }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
+        }
+        .frame(width: 300, height: 200)
+        .background(Color.white)
+        .cornerRadius(15)
+        .shadow(radius: 10)
+    }
+}
 
-            HStack {
-                Button("No") { onSwipe(.left) }
-                Button("Yes") { onSwipe(.right) }
+
+struct CardView: View {
+    let card: Card
+    @Binding var flipped: Bool
+
+    var body: some View {
+        VStack {
+            if !flipped {
+                Image(card.imagePath)
+                    .resizable()
+                    .scaledToFit()
+                    .padding()
+                    .foregroundStyle(.white)
+                    .cornerRadius(10)
+                Text(card.text)
+                    .font(.title3)
+                    .padding()
+                    .foregroundStyle(.white)
+            } else {
+                Text(card.explanation)
+                    .font(.title2)
+                    .foregroundStyle(.white)
+                    .padding()
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0)) // Counter-rotate the text
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.white)
+        .background(Color.white.opacity(0.3))
         .cornerRadius(10)
         .shadow(radius: 5)
-    }
-}
-
-enum StoryCardData: CaseIterable {
-    case scenario1, scenario2 // Define your scenarios
-
-    var question: String {
-        // Return the question for each scenario
-        switch self {
-        case .scenario1:
-            return "Question for Scenario 1"
-        case .scenario2:
-            return "Question for Scenario 2"
+        .rotation3DEffect(.degrees(flipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
+        .onTapGesture {
+            withAnimation {
+                flipped.toggle()
+            }
         }
     }
-
-    var imageName: String {
-        // Return the image name for each scenario
-        return "placeholder_image"
-    }
 }
 
-enum SwipeDirection {
-    case left, right
+
+struct AnswerButtonStyle: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .font(.system(size: 20))
+            .bold()
+            .foregroundColor(.white)
+            .padding()
+            .frame(maxWidth: .infinity, maxHeight: 100)
+            .background(Color.white.opacity(0.2))
+            .cornerRadius(10)
+    }
 }
 
 struct StoryCardView_Previews: PreviewProvider {
     static var previews: some View {
-        StoryCardView()
+        let sampleCards = [
+            Card(
+                imagePath: "exampleImage1",
+                text: "Sample text for Card 1",
+                explanation: "Explanation for Card 1",
+                answer1: "Correct Answer",
+                answer2: "Wrong Answer"
+            ),
+            Card(
+                imagePath: "exampleImage2",
+                text: "Sample text for Card 2",
+                explanation: "Explanation for Card 2",
+                answer1: "Correct Answer",
+                answer2: "Wrong Answer"
+            )
+        ]
+        StoryCardView(storyTitle: "Sample Story Title", storyCards: sampleCards)
+            .previewLayout(.sizeThatFits)
     }
 }

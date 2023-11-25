@@ -17,21 +17,21 @@ struct StorySelectionView: View {
                 .padding(.top, 50)
 
             ScrollView {
-                ForEach(1...4, id: \.self) { index in
-                                NavigationLink(destination: StoryCardView()) {
-                                    Text("Story \(index)")
-                                        .font(.title)
-                                        .fontWeight(.semibold)
-                                        .foregroundColor(.white)
-                                        .padding()
-                                        .frame(maxWidth: .infinity)
-                                        .background(Color.white.opacity(0.2))
-                                        .cornerRadius(10)
-                                        .shadow(radius: 5)
-                                        .padding(.horizontal, 40)
-                                        .padding(.top, 20)
-                                }
-                            }
+                ForEach(stories, id: \.title) { story in
+                    NavigationLink(destination: StoryCardView(storyTitle: story.title, storyCards: story.cards)) {
+                        Text(story.title)
+                            .font(.title2)
+                            .fontWeight(.semibold)
+                            .foregroundColor(.white)
+                            .padding()
+                            .frame(maxWidth: .infinity)
+                            .background(Color.white.opacity(0.2))
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                            .padding(.horizontal, 40)
+                            .padding(.top, 20)
+                    }
+                }
             }
         }
         .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
