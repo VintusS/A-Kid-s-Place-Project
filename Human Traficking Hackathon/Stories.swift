@@ -22,7 +22,7 @@ struct Card {
 
 let stories = [
     Story(
-        title: "The Mysterious New Friend",
+        title: "The Mysterious New Friend⭐️",
         cards: [
             Card(
                 imagePath: "card_1_1",
@@ -70,7 +70,7 @@ let stories = [
         ]
     ),
     Story(
-        title: "The Online Adventure",
+        title: "The Online Adventure💻",
         cards: [
             Card(
                 imagePath: "card_2_1",
@@ -118,7 +118,7 @@ let stories = [
         ]
     ),
     Story(
-        title: "The Lost Dog Poster",
+        title: "The Lost Dog Poster🐶",
             cards: [
                 Card(
                     imagePath: "card_3_1",
@@ -158,7 +158,7 @@ let stories = [
             ]
         ),
     Story(
-        title: "The Too-Good-to-be-True Job Offer",
+        title: "The Too-Good-to-be-True Job Offer🕵️",
             cards: [
                 Card(
                     imagePath: "card_4_1",

@@ -12,10 +12,11 @@ struct MainMenuView: View {
         NavigationView {
             VStack(spacing: 30) {
                 Spacer()
-                Text("Your App Name")
-                    .font(.largeTitle)
+                Text("📚🕹️ \n A kid's play")
+                    .font(.system(size: 50))
                     .fontWeight(.bold)
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
                     .padding(.top, 50)
 
                 Spacer()
@@ -48,7 +49,7 @@ struct MainMenuView: View {
 
                 Spacer()
             }
-            .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+            .background((LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing)))
             .edgesIgnoringSafeArea(.all)
         }
     }

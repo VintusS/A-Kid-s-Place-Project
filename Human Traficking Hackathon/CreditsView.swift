@@ -7,6 +7,12 @@
 
 import SwiftUI
 
+struct TeamMember {
+    var name: String
+    var role: String
+    var imageName: String // Image name in the asset catalog
+}
+
 struct CreditsView: View {
     var body: some View {
         VStack {
@@ -25,38 +31,32 @@ struct CreditsView: View {
             .padding(.top, 20)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+        .background(LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .edgesIgnoringSafeArea(.all)
     }
 }
 
 struct TeamMemberCard: View {
     let index: Int
-    // Placeholder data for team members
     let names = ["Balamatiuc Eduard", "Plamadeala Maxim", "Negai Marin", "Mindrescu Dragomir"]
-    let roles = ["Role 1", "Role 2", "Role 3", "Role 4"]
+    let images = ["eduardo", "maximiliano", "marinio", "dragomirio"]
 
     var body: some View {
         VStack {
-            Image(systemName: "person.crop.circle.fill") // Placeholder for team member image
+            Image("\(images[index])")
                 .resizable()
                 .scaledToFill()
                 .frame(width: 120, height: 120)
                 .background(Color.white)
                 .clipShape(Circle())
-                .overlay(Circle().stroke(Color.blue, lineWidth: 3))
+                .overlay(Circle().stroke(Color.purple, lineWidth: 3))
                 .shadow(radius: 5)
 
             Text(names[index])
-                .font(.caption)
+                .font(.system(size: 14))
                 .fontWeight(.semibold)
                 .foregroundColor(.white)
                 .padding(.top, 10)
-
-            Text(roles[index])
-                .font(.system(size: 12))
-                .foregroundColor(.white.opacity(0.7))
-                .padding(.bottom, 20)
         }
         .padding()
         .background(Color.white.opacity(0.1))

@@ -30,6 +30,7 @@ struct StoryCardView: View {
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
+                    .multilineTextAlignment(.center)
                     .padding(.top, 50)
 
                 Spacer()
@@ -76,7 +77,7 @@ struct StoryCardView: View {
                 }
             }
         }
-        .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
+        .background(LinearGradient(gradient: Gradient(colors: [Color.yellow, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .edgesIgnoringSafeArea(.all)
     }
 
@@ -95,20 +96,41 @@ struct StoryCardView: View {
     }
 }
 
+
 struct EndCardView: View {
     var rightAnswerCount: Int
     var total: Int
     var onDismiss: () -> Void
+    @State private var animate = false
 
     var body: some View {
         VStack {
-            Text("Quiz Complete!")
+            Text(rightAnswerCount >= 5 ? "Very Nice!" : "Good Try")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-            
+
+            if rightAnswerCount >= 5 {
+                ZStack {
+                    ForEach(0..<5, id: \.self) { index in
+                        Image(systemName: "star.fill")
+                            .font(.system(size: 40))
+                            .foregroundColor(.yellow)
+                            .opacity(animate ? 1 : 0)
+                            .scaleEffect(animate ? 1.5 : 1)
+                            .rotationEffect(.degrees(animate ? 360 : 0))
+                            .offset(x: CGFloat(index - 2) * 30, y: animate ? -50 : 0)
+                    }
+                }
+                .onAppear {
+                    withAnimation(Animation.easeInOut(duration: 1).repeatForever(autoreverses: true)) {
+                        animate = true
+                    }
+                }
+            }
+
             Text("You got \(rightAnswerCount) out of \(total) right!")
                 .font(.headline)
-            
+
             Button("Close") {
                 onDismiss()
             }
@@ -134,25 +156,29 @@ struct CardView: View {
             if !flipped {
                 Image(card.imagePath)
                     .resizable()
-                    .scaledToFit()
-                    .padding()
-                    .foregroundStyle(.white)
                     .cornerRadius(10)
+                    .scaledToFit()
+                    .foregroundStyle(.white)
+                    .clipShape(RoundedRectangle(cornerRadius: 5.0))
+                    .padding()
                 Text(card.text)
                     .font(.title3)
                     .padding()
                     .foregroundStyle(.white)
+                    .multilineTextAlignment(.center)
+
             } else {
                 Text(card.explanation)
                     .font(.title2)
                     .foregroundStyle(.white)
                     .padding()
-                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0)) // Counter-rotate the text
+                    .multilineTextAlignment(.center)
+
+                    .rotation3DEffect(.degrees(180), axis: (x: 0, y: 1, z: 0))
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.white.opacity(0.3))
-        .cornerRadius(10)
         .shadow(radius: 5)
         .rotation3DEffect(.degrees(flipped ? 180 : 0), axis: (x: 0, y: 1, z: 0))
         .onTapGesture {
@@ -160,6 +186,7 @@ struct CardView: View {
                 flipped.toggle()
             }
         }
+        .cornerRadius(10)
     }
 }
 
@@ -167,13 +194,15 @@ struct CardView: View {
 struct AnswerButtonStyle: ButtonStyle {
     func makeBody(configuration: Configuration) -> some View {
         configuration.label
-            .font(.system(size: 20))
+            .font(.system(size: 17))
             .bold()
             .foregroundColor(.white)
             .padding()
             .frame(maxWidth: .infinity, maxHeight: 100)
             .background(Color.white.opacity(0.2))
             .cornerRadius(10)
+            .multilineTextAlignment(.center)
+
     }
 }
 
