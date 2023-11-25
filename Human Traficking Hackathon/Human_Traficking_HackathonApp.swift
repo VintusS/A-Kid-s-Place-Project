@@ -11,7 +11,7 @@ import SwiftUI
 struct Human_Traficking_HackathonApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MainMenuView()
         }
     }
 }
