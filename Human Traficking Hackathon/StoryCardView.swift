@@ -15,6 +15,10 @@ struct StoryCardView: View {
     @State private var dragState = CGSize.zero
     @State private var rightAnswerCount = 0
     @State private var showEndCard = false
+    @State private var showToast = false
+    @State private var toastMessage = ""
+    @State private var toastColor = Color.green
+
 
     let storyTitle: String
 
@@ -71,6 +75,12 @@ struct StoryCardView: View {
             }
             .blur(radius: showEndCard ? 20 : 0)
 
+            if showToast {
+                    ToastView(message: toastMessage, color: toastColor)
+                        .transition(.opacity)
+                        .zIndex(1)
+                }
+            
             if showEndCard {
                 EndCardView(rightAnswerCount: rightAnswerCount, total: storyCards.count) {
                     self.presentationMode.wrappedValue.dismiss()
@@ -85,14 +95,42 @@ struct StoryCardView: View {
         let correctAnswer = storyCards[currentCardIndex].answer1
         if answer == correctAnswer {
             rightAnswerCount += 1
-        }
-
-        if currentCardIndex < storyCards.count - 1 {
-            currentCardIndex += 1
-            flipped = false
+            toastMessage = "Good Job"
+            toastColor = Color.green
         } else {
-            showEndCard = true
+            toastMessage = "Wrong"
+            toastColor = Color.red
         }
+        
+        showToast = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { // Hide toast after 2 seconds
+            showToast = false
+            if currentCardIndex < storyCards.count - 1 {
+                currentCardIndex += 1
+                flipped = false
+            } else {
+                showEndCard = true
+            }
+        }
+    }
+}
+
+
+struct ToastView: View {
+    var message: String
+    var color: Color
+
+    var body: some View {
+        HStack {
+            Image(systemName: color == Color.green ? "checkmark.circle.fill" : "xmark.circle.fill")
+                .foregroundColor(color)
+            Text(message)
+                .foregroundColor(color)
+        }
+        .padding()
+        .background(Color.white)
+        .cornerRadius(10)
+        .shadow(radius: 5)
     }
 }
 
