@@ -13,6 +13,7 @@ import Foundation
 struct Story {
     let title: String
     let cards: [Card]
+    var isLocked: Bool
 }
 
 struct Card {
@@ -70,7 +71,7 @@ let stories = [
                 explanation: "Awareness and communication with trusted adults are key to safety.",
                                     answer1: "Learn and educate others",
                                     answer2: "Ignore the risks"            ),
-        ]
+        ], isLocked: false
     ),
     Story(
         title: "The Online Adventure💻",
@@ -118,7 +119,7 @@ let stories = [
                                     answer2: "Meet alone"
             ),
             
-        ]
+        ], isLocked: true
     ),
     Story(
         title: "The Lost Dog Poster🐶",
@@ -158,7 +159,7 @@ let stories = [
                     answer1: "Learn and advise others",
                     answer2: "Disregard caution"
                 )
-            ]
+            ], isLocked: true
         ),
     Story(
         title: "The Too-Good-to-be-True Job Offer🕵️",
@@ -198,7 +199,7 @@ let stories = [
                     answer1: "Learn and inform others",
                     answer2: "Disregard verification"
                 )
-            ]
+            ], isLocked: true
         )
 ]
 

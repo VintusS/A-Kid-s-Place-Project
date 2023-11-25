@@ -10,7 +10,7 @@ import SwiftUI
 struct TeamMember {
     var name: String
     var role: String
-    var imageName: String // Image name in the asset catalog
+    var imageName: String
 }
 
 struct CreditsView: View {

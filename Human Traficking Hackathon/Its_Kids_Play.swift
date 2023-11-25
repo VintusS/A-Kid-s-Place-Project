@@ -8,7 +8,7 @@
 import SwiftUI
 
 @main
-struct Human_Traficking_HackathonApp: App {
+struct A_Kids_Play: App {
     var body: some Scene {
         WindowGroup {
             MainMenuView()

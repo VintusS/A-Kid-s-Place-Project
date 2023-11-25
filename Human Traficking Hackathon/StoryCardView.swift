@@ -103,7 +103,7 @@ struct StoryCardView: View {
         }
         
         showToast = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) { // Hide toast after 2 seconds
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
             showToast = false
             if currentCardIndex < storyCards.count - 1 {
                 currentCardIndex += 1
