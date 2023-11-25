@@ -7,6 +7,9 @@
 
 import Foundation
 
+// MARK: Important
+// We had some issues reading json file and we didn't manage to fix it. So we created the variables in this file
+
 struct Story {
     let title: String
     let cards: [Card]
