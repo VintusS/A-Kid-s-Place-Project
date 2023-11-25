@@ -17,9 +17,21 @@ struct StorySelectionView: View {
                 .padding(.top, 50)
 
             ScrollView {
-                ForEach(1...8, id: \.self) { index in
-                    StoryButton(storyNumber: index)
-                }
+                ForEach(1...4, id: \.self) { index in
+                                NavigationLink(destination: StoryCardView()) {
+                                    Text("Story \(index)")
+                                        .font(.title)
+                                        .fontWeight(.semibold)
+                                        .foregroundColor(.white)
+                                        .padding()
+                                        .frame(maxWidth: .infinity)
+                                        .background(Color.white.opacity(0.2))
+                                        .cornerRadius(10)
+                                        .shadow(radius: 5)
+                                        .padding(.horizontal, 40)
+                                        .padding(.top, 20)
+                                }
+                            }
             }
         }
         .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
