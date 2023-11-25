@@ -13,16 +13,19 @@ struct CreditsView: View {
             Text("Our Team")
                 .font(.largeTitle)
                 .fontWeight(.bold)
-                .padding(.top, 40)
+                .foregroundColor(.white)
+                .padding(.top, 50)
 
-            ScrollView {
+            LazyVGrid(columns: [GridItem(.flexible()), GridItem(.flexible())], spacing: 30) {
                 ForEach(0..<4) { index in
                     TeamMemberCard(index: index)
-                        .padding(.top, index == 0 ? 20 : 0)
                 }
             }
+            .padding(.horizontal, 20)
+            .padding(.top, 20)
         }
-        .background(Color.white)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
         .edgesIgnoringSafeArea(.all)
     }
 }
@@ -30,33 +33,35 @@ struct CreditsView: View {
 struct TeamMemberCard: View {
     let index: Int
     // Placeholder data for team members
-    let names = ["Member 1", "Member 2", "Member 3", "Member 4"]
+    let names = ["Balamatiuc Eduard", "Plamadeala Maxim", "Negai Marin", "Mindrescu Dragomir"]
     let roles = ["Role 1", "Role 2", "Role 3", "Role 4"]
 
     var body: some View {
         VStack {
-            Image(systemName: "person.crop.circle") // Placeholder for team member image
+            Image(systemName: "person.crop.circle.fill") // Placeholder for team member image
                 .resizable()
-                .frame(width: 100, height: 100)
-                .padding(.top, 20)
-                .scaleEffect(1 + CGFloat(index) * 0.1) // Simple scale animation
-                .animation(.easeInOut(duration: 1.0), value: index)
+                .scaledToFill()
+                .frame(width: 120, height: 120)
+                .background(Color.white)
+                .clipShape(Circle())
+                .overlay(Circle().stroke(Color.blue, lineWidth: 3))
+                .shadow(radius: 5)
 
             Text(names[index])
-                .font(.title)
+                .font(.caption)
                 .fontWeight(.semibold)
+                .foregroundColor(.white)
                 .padding(.top, 10)
 
             Text(roles[index])
-                .font(.body)
-                .foregroundColor(.gray)
+                .font(.system(size: 12))
+                .foregroundColor(.white.opacity(0.7))
                 .padding(.bottom, 20)
         }
-        .frame(maxWidth: .infinity)
-        .background(LinearGradient(gradient: Gradient(colors: [Color.blue.opacity(0.5), Color.purple.opacity(0.5)]), startPoint: .top, endPoint: .bottom))
+        .padding()
+        .background(Color.white.opacity(0.1))
         .cornerRadius(10)
         .shadow(radius: 5)
-        .padding(.horizontal, 40)
     }
 }
 

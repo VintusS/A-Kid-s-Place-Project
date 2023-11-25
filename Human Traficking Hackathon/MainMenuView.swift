@@ -10,48 +10,45 @@ import SwiftUI
 struct MainMenuView: View {
     var body: some View {
         NavigationView {
-            VStack(spacing: 20) {
+            VStack(spacing: 30) {
                 Spacer()
                 Text("Your App Name")
                     .font(.largeTitle)
                     .fontWeight(.bold)
-                    .foregroundColor(.blue)
+                    .foregroundColor(.white)
+                    .padding(.top, 50)
 
                 Spacer()
-                
-                // Start Button (Add your own action)
-                Button(action: {
-                    // Action for Start button
-                }) {
+
+                NavigationLink(destination: StorySelectionView()) {
                     Text("Start")
                         .font(.title)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .leading, endPoint: .trailing))
+                        .background(Color.white.opacity(0.2))
                         .cornerRadius(10)
                         .shadow(radius: 5)
                 }
                 .padding(.horizontal, 40)
 
-                // Credits Button with NavigationLink
-                NavigationLink(destination: CreditsView().transition(.asymmetric(insertion: .move(edge: .trailing), removal: .move(edge: .leading)))) {
+                NavigationLink(destination: CreditsView()) {
                     Text("Credits")
                         .font(.title)
                         .fontWeight(.semibold)
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
-                        .background(LinearGradient(gradient: Gradient(colors: [Color.green, Color.yellow]), startPoint: .leading, endPoint: .trailing))
+                        .background(Color.white.opacity(0.2))
                         .cornerRadius(10)
                         .shadow(radius: 5)
                 }
                 .padding(.horizontal, 40)
-                
+
                 Spacer()
             }
-            .background(Color.white)
+            .background(LinearGradient(gradient: Gradient(colors: [Color.blue, Color.purple]), startPoint: .topLeading, endPoint: .bottomTrailing))
             .edgesIgnoringSafeArea(.all)
         }
     }
