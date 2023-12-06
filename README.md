@@ -1,5 +1,7 @@
 # A Kids Place: An Educational Game for Kids
 
+![Uploading Screenshot 2023-12-07 at 00.13.10.png…]()
+
 ## Introduction
 
 A Kids Place is an innovative iOS game developed in Swift, designed to teach children about the dangers of human trafficking in a child-friendly manner. This interactive game combines engaging storytelling, educational quizzes, and a secure environment to promote awareness and safety among the younger audience.
