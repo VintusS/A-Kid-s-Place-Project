@@ -1,6 +1,6 @@
 # A Kids Place: An Educational Game for Kids
 
-![Example Image](Screenshot 2023-12-07 at 00.13.10.png)
+![Screenshot](Screenshot%202023-12-07%20at%2000.13.10.png)
 
 ## Introduction
 
