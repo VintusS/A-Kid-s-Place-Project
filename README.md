@@ -1,4 +1,4 @@
-# SafeSteps: An Educational Game for Kids
+# A Kids Place: An Educational Game for Kids
 
 ## Introduction
 
