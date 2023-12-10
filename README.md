@@ -10,7 +10,6 @@ A Kids Place is an innovative iOS game developed in Swift, designed to teach chi
 
 - **Engaging Gameplay:** Follows an adventurous storyline with characters that kids can relate to.
 - **Educational Quizzes:** Interactive quizzes after each level to reinforce learning.
-- **Parental Guide:** Resources and guidelines to assist parents in discussing these sensitive topics.
 - **Child-Friendly Content:** All material is age-appropriate and vetted for child safety.
 - **Resources and Assistance:** Easy access to educational resources and helplines.
 
